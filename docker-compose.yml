@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  vllm:
+    build:
+      context: .
+    image: vllm-env
+    container_name: vllm-chat-api
+    restart: always
+    shm_size: "16g"
+    ports:
+      - "8889:8889"
+    environment:
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility
+      HUGGINGFACE_HUB_TOKEN: ${HUGGINGFACE_HUB_TOKEN}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: "all"
+              capabilities: [gpu]
